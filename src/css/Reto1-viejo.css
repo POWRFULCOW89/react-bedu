@@ -1,0 +1,41 @@
+html, body {
+    height: 100%;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    /* flex-direction: column; */
+
+    background-color: pink;
+}
+
+.container {
+    width: 100vw;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    flex-direction: row;
+}
+
+.mantel {
+    width: 300px;
+    height: 200px;
+    background-color: purple;
+
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    flex-direction: row;
+}
+
+.cubierto {
+    width: 30px;
+    height: 80%;
+    background-color: gray;
+}
+
+.plato {
+    width: 150px;
+    height: 150px;
+    background-color: white;
+    border-radius:100px;
+}

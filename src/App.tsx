@@ -1,6 +1,22 @@
-import React from 'react';
+import React, { useState } from 'react';
 import logo from './logo.svg';
 import './App.css';
+
+const characters = ["Batman", "Robin", "Joker"];
+
+interface CharProps {
+  characters: string[];
+}
+
+// Destructurando
+const Characters = ({characters}: CharProps) => <>{characters.map(char => <li>{char}</li>)}</>
+
+// Interface inline
+// const Characters = (props: {characters: string[]}) => <>{characters.map(char => <li>{char}</li>)}</>
+
+// Interface de props
+// const Characters = (props: CharProps) => <>{props.characters.map(char => <li>{char}</li>)}</>
+
 
 function App() {
   return (
@@ -18,6 +34,9 @@ function App() {
         >
           Learn React
         </a>
+        <ul>
+          {<Characters characters={characters} />}
+        </ul>
       </header>
     </div>
   );

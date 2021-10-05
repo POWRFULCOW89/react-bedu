@@ -1,12 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
+// import App from './App';
+// import Reto1 from './components/Reto1-viejo';
+import TodoList from './components/TodoList';
 import reportWebVitals from './reportWebVitals';
+import 'bulma/css/bulma.min.css';
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    {/* <App /> */}
+    <TodoList />
   </React.StrictMode>,
   document.getElementById('root')
 );
