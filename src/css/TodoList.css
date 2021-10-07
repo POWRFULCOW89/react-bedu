@@ -3,7 +3,7 @@
     border-bottom: 1px solid lightgray;
 }
 
-.todo-header {
+.todo-header, .todo-footer {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -25,4 +25,15 @@
 
 .todo-header__check:hover {
     transform: scale(1.2);
+}
+
+.todo-header__delete {
+    color: gray;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.todo-header__delete:hover {
+    color: red;
+    transform: scale(1.1);
 }
