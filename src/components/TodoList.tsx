@@ -83,7 +83,7 @@ const TodoList = () => {
   }
 
   const renderTodos = (): JSX.Element[] => {
-    return todos.map(({ name, date }, i) => <Todo name={name} date={date} handleDeleteTodo={() => handleDeleteTodo(i)} />);
+    return todos.map(({ name, date }, i) => <Todo name={name} date={date} handleDeleteTodo={() => handleDeleteTodo(i)} key={`${name}-${i}`}/>);
   };
 
 
