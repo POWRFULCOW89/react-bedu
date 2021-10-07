@@ -2,3 +2,27 @@
 .todo:not(:last-child) {
     border-bottom: 1px solid lightgray;
 }
+
+.todo-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: row;
+
+    margin: 10px;
+}
+
+.todo-header p {
+    margin-bottom: 0 !important;
+}
+
+.todo-header__check {
+    font-size: 28px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+
+}
+
+.todo-header__check:hover {
+    transform: scale(1.2);
+}
