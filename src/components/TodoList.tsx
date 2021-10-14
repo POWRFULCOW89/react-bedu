@@ -24,8 +24,7 @@ class Todo extends Component<Todos> {
       <div className="block todo">
         <div className="todo-header">
           <p
-            className="subtitle"
-            style={{ textDecoration: this.state.done ? "line-through" : "" }}
+            className={`subtitle ${this.state.done ? 'strike' : 'unstrike'}`}
           >
             {this.props.name}
           </p>
@@ -40,9 +39,7 @@ class Todo extends Component<Todos> {
         </div>
         <div className="todo-footer">
             <span
-                className={`todo-header__delete ${
-                this.state.done ? "fas" : "far"
-                } fa-trash-alt`}
+                className={`todo-header__delete far fa-trash-alt`}
                 onClick={() => {
                     if (this.props?.handleDeleteTodo) this.props.handleDeleteTodo();
                 }}

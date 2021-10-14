@@ -37,3 +37,25 @@
     color: red;
     transform: scale(1.1);
 }
+
+.strike, .unstrike {
+    position: relative;
+}
+
+.strike::after, .unstrike::after {
+    content: ' ';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    height: 1px;
+    background: black;
+    transition: all 0.3s ease;
+}
+
+.strike::after {
+    width: 100%;
+}
+
+.unstrike::after {
+    width: 0%;
+}
