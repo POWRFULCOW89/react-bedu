@@ -12,9 +12,16 @@ const sampleTodos = [
   { name: "Order pizza", date: new Date()},
 ];
 
+const Alert = ({dismiss}: {dismiss: Function}) => {
+ return <div className="notification is-danger">
+    <button className="delete" onClick={() => dismiss()}></button>
+    This task already exists!
+  </div>
+}
+
 class Todo extends Component<Todos> {
   state = {
-    done: false,
+    done: false
   };
 
   handleDoneTodo = () => this.setState({ done: !this.state.done });
@@ -54,6 +61,7 @@ class Todo extends Component<Todos> {
 const TodoList = () => {
   const [todos, setTodos] = useState<Todos[]>(sampleTodos);
   const [input, setInput] = useState("");
+  const [isErrorActive, setErrorActive] = useState(false);
 
   
   const handleNewTodo = () => {
@@ -61,8 +69,13 @@ const TodoList = () => {
     let name = el.value;
     if (name) {
       let newTodos = [...todos];
-      newTodos.push({ name, date: new Date() });
-      setTodos(newTodos);
+
+      const duplicate = newTodos.map(todo => todo.name).includes(name);
+
+      if (!duplicate){
+        newTodos.push({ name, date: new Date() });
+        setTodos(newTodos);
+      } else setErrorActive(true);
     }
     setInput('');
   };
@@ -98,6 +111,7 @@ const TodoList = () => {
               value={input}
               placeholder="Add a new task"
               onChange={(e) => {
+                setErrorActive(false);
                 setInput(e.target.value);
               }}
               onKeyPress={(e) => {
@@ -120,6 +134,7 @@ const TodoList = () => {
         <ul className="todos box">{renderTodos()}</ul>
       </div>
       <p className="box mt-5 subtitle">Total tasks: {todos?.length}</p>
+      {isErrorActive && <Alert dismiss={() => setErrorActive(false)}/>}
     </div>
   );
 };
