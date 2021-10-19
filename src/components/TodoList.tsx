@@ -5,11 +5,13 @@ interface Todos {
   name: string;
   date: Date;
   handleDeleteTodo?: Function;
+  handleDoneTodo?: Function;
+  done: boolean;
 }
 
 const sampleTodos = [
-  { name: "Clean the room", date: new Date()},
-  { name: "Order pizza", date: new Date()},
+  { name: "Clean the room", date: new Date(), done: false},
+  { name: "Order pizza", date: new Date(), done: false},
 ];
 
 const Alert = ({dismiss}: {dismiss: Function}) => {
@@ -20,28 +22,25 @@ const Alert = ({dismiss}: {dismiss: Function}) => {
 }
 
 class Todo extends Component<Todos> {
-  state = {
-    done: false
-  };
-
-  handleDoneTodo = () => this.setState({ done: !this.state.done });
 
   render() {
     return (
       <div className="block todo">
         <div className="todo-header">
           <p
-            className={`subtitle ${this.state.done ? 'strike' : 'unstrike'}`}
+            className={`subtitle ${this.props.done ? 'strike' : 'unstrike'}`}
           >
             {this.props.name}
           </p>
 
           <span
             className={`todo-header__check ${
-              this.state.done ? "fas" : "far"
+              this.props.done ? "fas" : "far"
             } fa-check-circle`}
-            style={{ color: this.state.done ? "green" : "gray" }}
-            onClick={this.handleDoneTodo}
+            style={{ color: this.props.done ? "green" : "gray" }}
+            onClick={() => {
+              if (this.props?.handleDoneTodo) this.props.handleDoneTodo()
+            }}
           ></span>
         </div>
         <div className="todo-footer">
@@ -62,6 +61,9 @@ const TodoList = () => {
   const [todos, setTodos] = useState<Todos[]>(sampleTodos);
   const [input, setInput] = useState("");
   const [isErrorActive, setErrorActive] = useState(false);
+  const [hideDone, setHideDone] = useState(false);
+
+  const [renderedTodos, setRenderedTodos] = useState(null);
 
   
   const handleNewTodo = () => {
@@ -73,7 +75,7 @@ const TodoList = () => {
       const duplicate = newTodos.map(todo => todo.name).includes(name);
 
       if (!duplicate){
-        newTodos.push({ name, date: new Date() });
+        newTodos.push({ name, date: new Date(), done: false });
         setTodos(newTodos);
       } else setErrorActive(true);
     }
@@ -92,14 +94,29 @@ const TodoList = () => {
     setTodos(newTodos);
   }
 
-  const renderTodos = (): JSX.Element[] => {
-    return todos.map(({ name, date }, i) => <Todo name={name} date={date} handleDeleteTodo={() => handleDeleteTodo(i)} key={`${name}-${i}`}/>);
+  const handleDoneTodo = (i: number): void => {
+    const newTodos = [...todos];
+    newTodos[i].done = !newTodos[i].done;
+    setTodos(newTodos);
+  }
+
+  const renderTodos = () => {
+    
+    let newTodos = [...todos];
+
+    if (hideDone) newTodos = newTodos.filter(todo => !todo.done);
+
+    return <div>
+      {newTodos.length > 0 && <ul className="todos box">
+        {newTodos.map(({ name, date, done }, i) => <Todo name={name} date={date} done={done} handleDoneTodo={() => handleDoneTodo(i)} handleDeleteTodo={() => handleDeleteTodo(i)} key={`${name}-${i}`}/>)}
+      </ul>}
+    </div>
+
   };
 
-
   return (
-    <div className="container">
-      <h1 className="title">Todo List</h1>
+    <div className="container center" style={{flexDirection: 'column', alignItems: 'stretch'}}>
+      <h1 className="title left">Todo List</h1>
 
       <form className="box">
         <div className="field has-addons">
@@ -130,11 +147,18 @@ const TodoList = () => {
           </div>
         </div>
       </form>
-      <div>
+      {/* <div>
         <ul className="todos box">{renderTodos()}</ul>
-      </div>
+      </div> */}
+      {renderTodos()}
       <p className="box mt-5 subtitle">Total tasks: {todos?.length}</p>
       {isErrorActive && <Alert dismiss={() => setErrorActive(false)}/>}
+      <button className="button" onClick={() => setHideDone(!hideDone)}>
+        <span className="icon is-small">
+          <i className={`fas fa-${hideDone ? 'eye' : 'eye-slash'}`}></i>
+        </span>
+        <span>{hideDone ? 'Show done' : 'Hide done'}</span>
+      </button>
     </div>
   );
 };
