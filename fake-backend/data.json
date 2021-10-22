@@ -1,0 +1,64 @@
+{
+  "todos": [
+    {
+      "id": 1,
+      "name": "Sesión 1 (JSX)",
+      "date": "2021-10-22T22:45:49.703Z",
+      "done": true
+    },
+    {
+      "id": 2,
+      "name": "Sesión 2 (Estado y propiedades)",
+      "date": "2021-10-22T22:45:49.703Z",
+      "done": false
+    },
+    {
+      "id": 3,
+      "name": "Sesión 3 (Ciclo de vida)",
+      "date": "2021-10-22T22:45:49.703Z",
+      "done": true
+    },
+    {
+      "id": 4,
+      "name": "Sesión 4 (Hooks)",
+      "date": "2021-10-22T22:45:49.703Z",
+      "done": false
+    },
+    {
+      "id": 5,
+      "name": "Sesión 5 (Hooks)",
+      "date": "2021-10-22T22:45:49.703Z",
+      "done": true
+    },
+    {
+      "id": 6,
+      "name": "Sesión 6 (Rutas)",
+      "date": "2021-10-22T22:45:49.703Z",
+      "done": false
+    },
+    {
+      "id": 7,
+      "name": "Sesión 7 (PWA)",
+      "date": "2021-10-22T22:45:49.703Z",
+      "done": true
+    },
+    {
+      "id": 8,
+      "name": "Sesión 8 (Material UI)",
+      "date": "2021-10-22T22:45:49.703Z",
+      "done": false
+    },
+    {
+      "id": 9,
+      "name": "Nueva tarea",
+      "date": "2021-10-22T22:45:49.703Z",
+      "done": false
+    },
+    {
+      "id": 10,
+      "name": "Otra tarea",
+      "date": "2021-10-22T22:49:46.975Z",
+      "done": false
+    }
+  ]
+}

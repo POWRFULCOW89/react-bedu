@@ -1,18 +1,19 @@
 import "../css/TodoList.css";
-import { useState, Component } from "react";
+import { useState, useEffect, Component } from "react";
 
 interface Todos {
   name: string;
-  date: Date;
+  date?: Date;
   handleDeleteTodo?: Function;
   handleDoneTodo?: Function;
   done: boolean;
+  index?: number;
 }
 
-const sampleTodos = [
-  { name: "Clean the room", date: new Date(), done: false},
-  { name: "Order pizza", date: new Date(), done: false},
-];
+// const sampleTodos = [
+//   { name: "Clean the room", date: new Date(), done: false},
+//   { name: "Order pizza", date: new Date(), done: false},
+// ];
 
 const Alert = ({dismiss}: {dismiss: Function}) => {
  return <div className="notification is-danger">
@@ -39,7 +40,24 @@ class Todo extends Component<Todos> {
             } fa-check-circle`}
             style={{ color: this.props.done ? "green" : "gray" }}
             onClick={() => {
-              if (this.props?.handleDoneTodo) this.props.handleDoneTodo()
+              if (this.props.index) {
+                fetch(`http://localhost:4000/todos/${this.props.index + 1}`, {
+                  method: 'PATCH',
+                  headers: {
+                    'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify({
+                    id: this.props.index,
+                    done: !this.props.done,
+                  }),
+                })
+                  .then(console.log)
+                  .then(() => {
+                    if (this.props.handleDoneTodo) this.props.handleDoneTodo(!this.props.done);
+                  })
+                  .catch(console.error)
+              }
+
             }}
           ></span>
         </div>
@@ -50,21 +68,35 @@ class Todo extends Component<Todos> {
                     if (this.props?.handleDeleteTodo) this.props.handleDeleteTodo();
                 }}
             ></span>
-            <p className="has-text-right">{this.props.date.toDateString()}</p>
+            {this.props.date ? <p className="has-text-right">{ new Date(this.props.date).toDateString()}</p> : null}
         </div>
       </div>
     );
   }
 }
 
+
+
 const TodoList = () => {
-  const [todos, setTodos] = useState<Todos[]>(sampleTodos);
+  // const [todos, setTodos] = useState<Todos[]>(sampleTodos);
+  const [todos, setTodos] = useState<Todos[]>([]);
   const [input, setInput] = useState("");
   const [isErrorActive, setErrorActive] = useState(false);
   const [hideDone, setHideDone] = useState(false);
+  const [refresh, setRefresh] = useState(false);
 
-  const [renderedTodos, setRenderedTodos] = useState(null);
+  const url = "http://localhost:4000/todos";
 
+  useEffect(() => {
+    const getData = async() => {
+        const res = await fetch(url);
+        const data = await res.json();
+        setTodos(data);
+    }
+
+    getData();
+
+  }, []);  
   
   const handleNewTodo = () => {
     let el = document.querySelector("#input") as HTMLButtonElement;
@@ -75,8 +107,26 @@ const TodoList = () => {
       const duplicate = newTodos.map(todo => todo.name).includes(name);
 
       if (!duplicate){
+        // Visualmente
         newTodos.push({ name, date: new Date(), done: false });
         setTodos(newTodos);
+
+        // En el servidor
+        fetch(`http://localhost:4000/todos`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            id: newTodos.length,
+            name,
+            date: new Date(),
+            done: false,
+          }),
+        })
+          .then(console.log)
+          .catch(console.error)
+
       } else setErrorActive(true);
     }
     setInput('');
@@ -95,9 +145,24 @@ const TodoList = () => {
   }
 
   const handleDoneTodo = (i: number): void => {
+    // setRefresh(true);
     const newTodos = [...todos];
     newTodos[i].done = !newTodos[i].done;
     setTodos(newTodos);
+    
+    // fetch(`/todos/${i}`, {
+    //   method: 'PATCH',
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //   },
+    //   body: JSON.stringify({
+    //     done: item.name,
+    //     price: item.price 
+    //   }),
+    // })
+    //   .then((res) => res.json())
+    //   .then((result) => setItem(result))
+    //   .catch((err) => console.log('error: ', err))
   }
 
   const renderTodos = () => {
@@ -108,7 +173,7 @@ const TodoList = () => {
 
     return <div>
       {newTodos.length > 0 && <ul className="todos box">
-        {newTodos.map(({ name, date, done }, i) => <Todo name={name} date={date} done={done} handleDoneTodo={() => handleDoneTodo(i)} handleDeleteTodo={() => handleDeleteTodo(i)} key={`${name}-${i}`}/>)}
+        {newTodos.map(({ name, date, done }, i) => <Todo name={name} date={date} done={done} index={i} handleDoneTodo={() => handleDoneTodo(i)} handleDeleteTodo={() => handleDeleteTodo(i)} key={`${name}-${i}`}/>)}
       </ul>}
     </div>
 
@@ -141,18 +206,19 @@ const TodoList = () => {
             />
           </div>
           <div className="control">
-            <a onClick={handleNewTodo} className="button is-info">
+            <button onClick={handleNewTodo} className="button is-info">
               Add
-            </a>
+            </button>
           </div>
         </div>
       </form>
-      {/* <div>
-        <ul className="todos box">{renderTodos()}</ul>
-      </div> */}
+
       {renderTodos()}
+      
       <p className="box mt-5 subtitle">Total tasks: {todos?.length}</p>
+      
       {isErrorActive && <Alert dismiss={() => setErrorActive(false)}/>}
+      
       <button className="button" onClick={() => setHideDone(!hideDone)}>
         <span className="icon is-small">
           <i className={`fas fa-${hideDone ? 'eye' : 'eye-slash'}`}></i>
