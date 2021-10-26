@@ -4,13 +4,34 @@ import './index.css';
 // import App from './App';
 // import Reto1 from './components/Reto1-viejo';
 import TodoList from './components/TodoList';
+import Task from './components/Task';
+
 import reportWebVitals from './reportWebVitals';
 import 'bulma/css/bulma.min.css';
 
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link
+} from "react-router-dom";
+
+// ReactDOM.render(
+//   <React.StrictMode>
+//     {/* <App /> */}
+//     <TodoList />
+//   </React.StrictMode>,
+//   document.getElementById('root')
+// );
+
 ReactDOM.render(
   <React.StrictMode>
-    {/* <App /> */}
-    <TodoList />
+    <Router>
+      <Switch>
+        <Route exact path="/" component={TodoList} />
+        <Route exact path="/todo" component={Task} />
+      </Switch>
+    </Router>
   </React.StrictMode>,
   document.getElementById('root')
 );

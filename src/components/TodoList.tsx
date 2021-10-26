@@ -1,5 +1,6 @@
 import "../css/TodoList.css";
 import { useState, useEffect, Component } from "react";
+import { Link } from 'react-router-dom';
 
 interface Todos {
   name: string;
@@ -28,11 +29,12 @@ class Todo extends Component<Todos> {
     return (
       <div className="block todo">
         <div className="todo-header">
-          <p
+          <a
+            href={`todo?task=${Number(this.props.index) + 1}`}
             className={`subtitle ${this.props.done ? 'strike' : 'unstrike'}`}
           >
             {this.props.name}
-          </p>
+          </a>
 
           <span
             className={`todo-header__check ${
@@ -89,9 +91,13 @@ const TodoList = () => {
 
   useEffect(() => {
     const getData = async() => {
+      try {
         const res = await fetch(url);
         const data = await res.json();
         setTodos(data);
+      } catch (error) {
+        
+      }
     }
 
     getData();
