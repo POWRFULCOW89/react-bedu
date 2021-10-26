@@ -29,7 +29,11 @@ ReactDOM.render(
     <Router>
       <Switch>
         <Route exact path="/" component={TodoList} />
-        <Route exact path="/todo" component={Task} />
+        <Route exact path="/task/:todo" component={Task} />
+        <Route path='*' render={() => <div>
+          <h1> 404 </h1>
+          <p>The requested page could not be found</p>
+        </div>} />
       </Switch>
     </Router>
   </React.StrictMode>,

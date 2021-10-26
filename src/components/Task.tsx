@@ -1,11 +1,15 @@
 import { useState, useEffect } from 'react';
 import '../css/Task.css';
+import { useHistory, RouteComponentProps } from 'react-router-dom';
 
-let urlParams = new URLSearchParams(window.location.search).get('task');
-const url = "http://localhost:4000/todos/" + urlParams;
+type Params = {
+    todo: string;
+}
 
-const Task = () => {
-    // let task = null;
+const Task = ({match}: RouteComponentProps<Params>) => {
+    const history = useHistory();
+    let { todo } = match.params;
+    const url = "http://localhost:4000/todos/" + todo;
     const [task, setTask] = useState({name: 'Task', id: 1, date: new Date().toUTCString(), done: false});
 
     useEffect(() => {
@@ -32,6 +36,9 @@ const Task = () => {
             <p>Date: {task.date}</p>
             <p>Done: {task.done ? 'True' : 'False'}</p>
         </div>
+        <button onClick={() => history.goBack()}>
+            Back
+        </button>
     </div>
 }
 

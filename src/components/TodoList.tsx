@@ -29,12 +29,16 @@ class Todo extends Component<Todos> {
     return (
       <div className="block todo">
         <div className="todo-header">
-          <a
-            href={`todo?task=${Number(this.props.index) + 1}`}
+          {/* <a
+            href={`task/${Number(this.props.index) + 1}`}
             className={`subtitle ${this.props.done ? 'strike' : 'unstrike'}`}
           >
             {this.props.name}
-          </a>
+          </a> */}
+          
+          <Link to={`task/${Number(this.props.index) + 1}`}>
+            {this.props.name}
+          </Link>
 
           <span
             className={`todo-header__check ${
