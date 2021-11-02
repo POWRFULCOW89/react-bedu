@@ -1,6 +1,8 @@
 import "../css/TodoList.css";
 import { useState, useEffect, Component } from "react";
 import { Link } from 'react-router-dom';
+// import Paper from '@mui/material/Paper';
+import { Button, IconButton, InputBase, Paper, TextField } from "@mui/material";
 
 interface Todos {
   name: string;
@@ -27,16 +29,14 @@ class Todo extends Component<Todos> {
 
   render() {
     return (
-      <div className="block todo">
+      // <div className="block todo">
+      <Paper
+        elevation={0}
+        // sx={{fontSize: 18 }}
+      >
         <div className="todo-header">
-          {/* <a
-            href={`task/${Number(this.props.index) + 1}`}
-            className={`subtitle ${this.props.done ? 'strike' : 'unstrike'}`}
-          >
-            {this.props.name}
-          </a> */}
           
-          <Link to={`task/${Number(this.props.index) + 1}`}>
+          <Link to={`task/${Number(this.props.index) + 1}`} style={{fontSize: 20}}>
             {this.props.name}
           </Link>
 
@@ -76,7 +76,8 @@ class Todo extends Component<Todos> {
             ></span>
             {this.props.date ? <p className="has-text-right">{ new Date(this.props.date).toDateString()}</p> : null}
         </div>
-      </div>
+      {/* </div> */}
+      </Paper>
     );
   }
 }
@@ -89,7 +90,7 @@ const TodoList = () => {
   const [input, setInput] = useState("");
   const [isErrorActive, setErrorActive] = useState(false);
   const [hideDone, setHideDone] = useState(false);
-  const [refresh, setRefresh] = useState(false);
+  // const [refresh, setRefresh] = useState(false);
 
   const url = "http://localhost:4000/todos";
 
@@ -193,48 +194,65 @@ const TodoList = () => {
     <div className="container center" style={{flexDirection: 'column', alignItems: 'stretch'}}>
       <h1 className="title left">Todo List</h1>
 
-      <form className="box">
-        <div className="field has-addons">
-          <div className="control">
-            <input
-              className="input"
-              id="input"
-              type="text"
-              value={input}
-              placeholder="Add a new task"
-              onChange={(e) => {
-                setErrorActive(false);
-                setInput(e.target.value);
-              }}
-              onKeyPress={(e) => {
-                if (e.key === "Enter") {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  handleNewTodo();
-                }
-              }}
-            />
-          </div>
-          <div className="control">
-            <button onClick={handleNewTodo} className="button is-info">
-              Add
-            </button>
-          </div>
-        </div>
-      </form>
+    <Paper
+      component="form"
+      elevation={3}
+      sx={{ p: '15px', mb: 2, display: 'flex', alignItems: 'center'}}
+    >
+      <TextField 
+        // id="outlined-basic" 
+        label="Add a new task" 
+        variant="outlined"
+        sx={{ mr: 2, fontSize: 20}}
+        // placeholder="Add a new task"
+        // className="input"
+        error={isErrorActive}
+        // helperText={isErrorActive && input.length > 0 ? "Task already exists" : "Enter a task"}
+        helperText={()=> {
+          if (isErrorActive){
+            if (input.length > 0) return "Task already exists";
+            else return "Enter a task";
+          }
+        }}
+        id="input"
+        type="text"
+        value={input}
+        onChange={(e) => {
+          setErrorActive(false);
+          setInput(e.target.value);
+        }}
+        onKeyPress={(e) => {
+          console.log('enter');
+          if (e.key === "Enter") {
+            e.preventDefault();
+            e.stopPropagation();
+            if (input.length > 0){
+              handleNewTodo();
+            } else setErrorActive(true);
+          }
+        } }
+      />
+      <Button  variant="contained" onClick={handleNewTodo}>
+        Add
+      </Button>
+    </Paper>
 
       {renderTodos()}
       
-      <p className="box mt-5 subtitle">Total tasks: {todos?.length}</p>
+      {/* <p className="box mt-5 subtitle">Total tasks: {todos?.length}</p> */}
+      <Paper elevation={3} sx={{p: 2, fontSize: 20, m: "20px 0px"}}>
+      Total tasks: {todos?.length}
+        </Paper>
       
-      {isErrorActive && <Alert dismiss={() => setErrorActive(false)}/>}
+      {/* {isErrorActive && <Alert dismiss={() => setErrorActive(false)}/>} */}
       
-      <button className="button" onClick={() => setHideDone(!hideDone)}>
+      <Button variant="outlined"  onClick={() => setHideDone(!hideDone)}>
         <span className="icon is-small">
           <i className={`fas fa-${hideDone ? 'eye' : 'eye-slash'}`}></i>
         </span>
+        &nbsp;
         <span>{hideDone ? 'Show done' : 'Hide done'}</span>
-      </button>
+      </Button>
     </div>
   );
 };

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import '../css/Task.css';
 import { useHistory, RouteComponentProps } from 'react-router-dom';
+import { Paper, Button } from '@mui/material';
 
 type Params = {
     todo: string;
@@ -27,7 +28,8 @@ const Task = ({match}: RouteComponentProps<Params>) => {
     
     }, []); 
 
-    return <div className="box">
+    // return <div className="box">
+    return <Paper elevation={3} sx={{p:3}}>
         <h1 className="title">
             {task.name}
         </h1> 
@@ -36,10 +38,11 @@ const Task = ({match}: RouteComponentProps<Params>) => {
             <p>Date: {task.date}</p>
             <p>Done: {task.done ? 'True' : 'False'}</p>
         </div>
-        <button onClick={() => history.goBack()}>
+        <Button onClick={() => history.goBack()}>
             Back
-        </button>
-    </div>
+        </Button>
+     {/* </div> */}
+    </Paper>
 }
 
 export default Task;
